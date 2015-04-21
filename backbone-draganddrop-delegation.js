@@ -35,7 +35,14 @@
                 },
                 startDrag = function (event) {
                     isDragging = true;
-                    $clone = $el.clone().css({
+                   $clone = $el.clone();
+                    // keep track of element / cursor offset
+					var eo, co;
+					eo = $el.offset();
+					co = {top: event.clientY, left: event.clientX};
+					// save cursor / element offset on clone object
+					$clone.offset = {top: eo.top-co.top, left: eo.left-co.left};
+					$clone.css({
                         position: 'absolute',
                         translateX: event.clientX + 5,
                         translateY: event.clientY + 5
@@ -57,8 +64,8 @@
                         $dragoverElement = null;
                     }
                     $clone.css({
-                        left: event.clientX + 5,
-                        top: event.clientY + 5
+                        left: event.clientX + $clone.offset.left,
+                        top: event.clientY + $clone.offset.top
                     });
                 },
                 handleDrag = function (event) {
